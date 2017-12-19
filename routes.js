@@ -22,6 +22,7 @@ module.exports = function (app, mongoose, io) {
         })
 
         .post(function (req, res) {
+            console.log(req.body);
             var board = new Board();
             board.serialNumber = req.body.serialNumber;
             board.macAddress = req.body.macAddress;
@@ -83,20 +84,21 @@ module.exports = function (app, mongoose, io) {
     // water sensor
     app.route('/api/diaryflow')
         .get(function (req, res) {
-            DiaryFlow.find(function (err, board) {
+            DiaryFlow.find(function (err, diaryflow) {
                 if (err)
                     res.status(500).send(err);
 
-                res.status(200).json(board);
+                res.status(200).json(diaryflow);
             }).catch(err => {
                 console.log('Error GET /api/diaryflow - ', err);
             });
         })
 
         .post(function (req, res) {
-            io.emit('liters', req.body.liters);
-            
             var diaryflow = new DiaryFlow();
+                
+            console.log('diary flow received ', req.body);
+
             diaryflow.boardSerialNumber = req.body.boardSerialNumber;
             diaryflow.liters = req.body.liters;
             diaryflow.timestamp = new Date();
@@ -105,20 +107,35 @@ module.exports = function (app, mongoose, io) {
                 if (error)
                     res.status(500).send(error);
                 
-                res.status(200).json(board);
+                res.status(200).json(diaryflow);
+            });
+        })
+        .delete(function (req, res) {
+            DiaryFlow.remove(function (error) {
+                if (error)
+                    res.send(error);
+
+                res.json({ message: 'All diary flows deleted' });
             });
         });
 
     app.route('/api/diaryflow/:_id')
         .get(function (req, res) {
-            DiaryFlow.findById(req.body._id, function (err, board) {
+            DiaryFlow.findById(req.body._id, function (err, diaryflow) {
                 if (err)
                     res.status(500).send(err);
 
-                res.status(200).json(board);
+                res.status(200).json(diaryflow);
             }).catch(err => {
                 console.log('Error GET /api/diaryflow - ', err);
             });
         })
+        .delete(function (req, res) {
+            DiaryFlow.remove({ _id: req.body._id }, function (error) {
+                if (error)
+                    res.send(error);
 
+                res.json({ message: 'Diary flow deleted' });
+            });
+        });
 }
