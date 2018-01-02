@@ -108,6 +108,9 @@ module.exports = function (app, mongoose, io) {
                     res.status(500).send(error);
                 
                 res.status(200).json(diaryflow);
+            }).catch(err => {
+                // TODO: handle
+                console.log('Error in post diary flow ', err);
             });
         })
         .delete(function (req, res) {
