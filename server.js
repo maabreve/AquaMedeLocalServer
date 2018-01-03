@@ -16,20 +16,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors());
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Content-Type", "application/json");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   next();
 });
+
 // db connection ===============================================================
 mongoose.connect(config.url, { useMongoClient: true }).then(
   console.log('Success local database connection')
 ).catch(err => {
   console.log('Local database connection error - ', err)
 });
-
 
 // launch ======================================================================
 const server = app.listen(port, () => {
@@ -45,4 +45,17 @@ io.on('connection', function (socket) {
 });
 
 // routes ======================================================================
-require('./routes.js')(app, mongoose, io); 
+require('./routes.js')(app, mongoose, io);
+
+// consolidates ================================================================
+function consolidate() {
+  console.log('Consolidate initialized!');
+
+  // get registers
+
+  // consolidate
+
+  // delete registers
+}
+
+setInterval(consolidate, 300000);

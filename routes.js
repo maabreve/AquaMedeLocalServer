@@ -96,17 +96,20 @@ module.exports = function (app, mongoose, io) {
 
         .post(function (req, res) {
             var diaryflow = new DiaryFlow();
-                
+
             console.log('diary flow received ', req.body);
 
-            diaryflow.boardSerialNumber = req.body.boardSerialNumber;
-            diaryflow.liters = req.body.liters;
-            diaryflow.timestamp = new Date();
-            
+            diaryflow.idLeitura = req.body.idLeitura;
+            diaryflow.idSensor = req.body.idSensor;
+            diaryflow.vazaoInstantanea = req.body.vazaoInstantanea;
+            diaryflow.volumeTotalAcumulado = req.body.volumeTotalAcumulado;
+            diaryflow.volumeDiaAcumulado = req.body.volumeDiaAcumulado;
+            diaryflow.dataHora = req.body.dataHora;
+
             diaryflow.save(function (error) {
                 if (error)
                     res.status(500).send(error);
-                
+
                 res.status(200).json(diaryflow);
             }).catch(err => {
                 // TODO: handle
